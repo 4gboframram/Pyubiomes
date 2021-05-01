@@ -20,8 +20,7 @@ This example is here to give ideas on how to use these functions together to mak
 ###############
 
 import Pyubiomes
-from Pyubiomes import Versions, Biomes, Structures
-from Pyubiomes.searches import structureLower48, biomesInArea, isValidStructurePos, getSpawn
+from Pyubiomes import Versions, Biomes, Structures, structureLower48, biomesInArea, isValidStructurePos, getSpawn
 
 import concurrent.futures
 
