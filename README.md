@@ -9,7 +9,7 @@ You can install Pyubiomes with pip using the following
 ```pip install Pyubiomes```
 
 Manual Installation:
-(wip) Will require cloning Cubiomes(https://github.com/Cubitect/cubiomes)
+(wip) Will require cloning [Cubiomes](https://github.com/Cubitect/cubiomes)
 
 ## Example
 This example is here to give ideas on how to use these functions together to make a seedfinder, as for beginners, it may not be obvious to them at first. 
