@@ -48,7 +48,7 @@ def finder(start, increment):
 					seeds.append(seed)
 				if len(seeds)>=1: #make sure all threads break out of the loop
 					break
-			seed+=1
+			seed+=increment
 				
 
 def start(n): #ThreadPool
