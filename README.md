@@ -4,6 +4,7 @@ Pyubiomes is a (relatively) easy to use, easy to understand wrapper for the Cubi
 
 ## Installation
 
+RIGHT NOW THIS PACKAGE IS ONLY FOR LINUX. I AM TRYING TO FIX THAT RIGHT NOW
 
 You can install Pyubiomes with pip using the following
 ```pip install Pyubiomes```
