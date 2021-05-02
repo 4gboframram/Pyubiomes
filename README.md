@@ -54,7 +54,7 @@ Try to locate `Python.h` with `locate Python.h` If you can find the file located
 
 
 
-However, if you can't locate the file, use your package manager to install the header files and static libraries for python dev (courtesy of [this stackoverflow question](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
+However, if you can't locate the file, use your package manager to install the header files and static libraries for python dev (courtesy of [this stackoverflow question](https://stackoverflowcom/questions/21530577/fatal-error-python-h-no-such-file-or-directory))
 
 With `apt` (**Ubuntu, Debian...**)
 :
