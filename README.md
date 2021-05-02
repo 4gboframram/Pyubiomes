@@ -4,15 +4,87 @@ Pyubiomes is a (relatively) easy to use, easy to understand wrapper for the Cubi
 
 ## Installation
 
-RIGHT NOW THIS PACKAGE IS ONLY FOR LINUX. I AM TRYING TO FIX THAT RIGHT NOW
+**NOTE: RIGHT NOW THE AUTO BUILD/INSTALL IS ONLY FOR LINUX. I AM TRYING TO FIX THAT RIGHT NOW, BUT I CAN'T GET SHIT TO COMPILE ON WINDOWS**
 
 You can install Pyubiomes with pip using the following
 ```pip install Pyubiomes```
 
-Manual Installation:
-(wip) Will require cloning [Cubiomes](https://github.com/Cubitect/cubiomes)
+### Manual Build/Installation:
+___
+#### Requirements:
 
-## Example
+ Cubiomes and `Python.h`
+ 
+
+
+#### Linux: 
+
+- Clone this reposititory and [Cubiomes](https://github.com/Cubitect/cubiomes)
+
+- Move the contents of the Cubiomes master branch into the `Pyubiomes-master/Pyubiomes/searches` directory
+- Open the terminal and change the current working directory to the searches folder you just extracted the cubiomes repo into with `cd` 
+- Run the following command `python setup.py build`
+- Move the `.so` file from the folder that starts with `lib.linux` 2 folders up (to the Pyubiomes folder). 
+- Rename that `.so` file to `searches.so`
+- Run `cd ../../` to change the current directory to the main branch's folder
+- Run `pip install .` to build and install the module
+
+*Hopefully* nothing went wrong
+
+___
+### Windows:
+
+I couldn't do it because I couldn't get the compiler to recognize `Python.h` or any of the files in the cubiomes library, but it is probably as follows.
+ - Do the first 2 steps of the Linux  Installation
+
+ - Instead of a `.so` file, you need to use setup.py to compile to a `.dll`
+ - Perform the same actions to the `.dll` file as you would to the `.so` file
+ - Modify line 4 of `pyubiomes-main/Pyubiomes/search.py` and replace `searches.so` with `searches.dll`
+ - Modify line 4 of `pyubiomes-main/setup.py` and replace `searches.so` with `searches.dll`
+
+___
+### Installation Errors:
+
+ If you get errors due to the absence of `Python.h`, here's how you might be able to fix them:
+
+
+ **Linux:** 
+
+Try to locate `Python.h` with `locate Python.h` If you can find the file located, most likely [this stackoverflow answer](stackoverflow.com/a/19344978/4954434) will work. It is likely a path issue
+
+
+
+However, if you can't locate the file, use your package manager to install the header files and static libraries for python dev (courtesy of [this stackoverflow question](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
+
+With `apt` (**Ubuntu, Debian...**)
+:
+`sudo apt-get install python3-dev`
+
+For `yum` (**CentOS, RHEL...**)
+:
+`sudo yum install python3-devel`
+
+For `dnf` (**Fedora...**)
+:
+`sudo dnf install python3-devel`
+
+For `zypper` (**openSUSE...**)
+:
+`sudo zypper in python3-devel`
+
+For `apk` (**Alpine...**)
+:
+`sudo apk add python3-dev `
+
+For `apt-cyg` (**Cygwin...**)
+:
+`apt-cyg install python3-devel`
+
+**Windows:**
+
+Honestly if I knew the answer for Windows, I would've had an auto install/build for it by now. I belive `Python.h` comes with the standard Python installation, so the problem is with path variables or your compiler not checking the proper include paths. I've tried everything I could on Windows, but I couldn't get anything to work. Kind of ironic considering I use it more than Linux and know like 10 times more 
+
+## Example Code
 This example is here to give ideas on how to use these functions together to make a seedfinder, as for beginners, it may not be obvious to them at first. 
 ```python
 ###############
