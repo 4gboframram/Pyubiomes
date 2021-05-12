@@ -2,7 +2,7 @@
 ## Introduction
 Pyubiomes is a (relatively) easy to use, easy to understand wrapper for the Cubiomes library and minecraft_nether_generation_rs rust library, and soon to be a few more. This project is still a wip, so please mention bugs/improvements. 
 
-If you would like to help work on this project, contact me on Discord: RamRam#0001 or join the Discord server. I still am relatively new to making Python modules, and especially seedfinding, so having an extra brain dedicated to this would be helpful so that I don't waste poor Neil's time asking stupid questions about Minecraft worldgen. This is my first Python module that uses a C extension and also my first project that uses C. Literally before starting this project, I only started learning C 2 days before.
+If you would like to help work on this project, contact me on Discord: RamRam#0001 or join the [Discord server](https://discord.gg/YtEb9HY5). I still am relatively new to making Python modules, and especially seedfinding, so having an extra brain dedicated to this would be helpful so that I don't waste poor Neil's time asking stupid questions about Minecraft worldgen. This is my first Python module that uses a C extension and also my first project that uses C. Literally before starting this project, I only started learning C 2 days before.
 
 ## Installation
 
