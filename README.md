@@ -17,7 +17,7 @@ ___
 
  - Cubiomes
  
- - [minecraft_nether_generation_rs] (github.com/SeedFinding/minecraft_nether_generation_rs) Rust libary with Python bindings (Not that hard to get)
+ - [minecraft_nether_generation_rs](github.com/SeedFinding/minecraft_nether_generation_rs) Rust libary with Python bindings (Not that hard to get)
 
 
 #### Linux: 
@@ -75,7 +75,8 @@ For `apt-cyg` (**Cygwin...**)
 
 **Windows:**
 
-Honestly if I knew the answer for Windows, I would've had an auto install/build for it by now. I belive `Python.h` comes with the standard Python installation, so the problem is with path variables or your compiler not checking the proper include paths. I've tried everything I could on Windows, but I couldn't get anything to work. Kind of ironic considering I use it more than Linux and know like 10 times more on Windows.
+Honestly... I don't even know why all the weird shit happens
+
 
 ## Example Code
 This example is here to give ideas on how to use these functions together to make a seedfinder, as for beginners, it may not be obvious to them at first. This is just an example. In reality, you would want to search the lower 48 bits first then find an upper 16 to meet the requirements
