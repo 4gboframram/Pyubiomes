@@ -15,7 +15,7 @@ You can install Pyubiomes with pip using the following
 ___
 #### Requirements:
 
- - Cubiomes(https://github.com/Cubitect/cubiomes)
+ - [Cubiomes](https://github.com/Cubitect/cubiomes)
  
  - [minecraft_nether_generation_rs](github.com/SeedFinding/minecraft_nether_generation_rs) Rust libary with Python bindings (Not that hard to get)
 
