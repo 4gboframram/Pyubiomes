@@ -1,10 +1,12 @@
-# Pyubiomes, a Simple (wip) Python Wrapper For [Cubiomes by Cubitect](https://github.com/Cubitect/cubiomes)
+# Pyubiomes, a Simple (wip) Python Wrapper For [Cubiomes by Cubitect](https://github.com/Cubitect/cubiomes) and other Seedfinding Utilities
 ## Introduction
-Pyubiomes is a (relatively) easy to use, easy to understand wrapper for the Cubiomes library. This project is still a wip, so please mention bugs/improvements. 
+Pyubiomes is a (relatively) easy to use, easy to understand wrapper for the Cubiomes library and minecraft_nether_generation_rs rust library, and soon to be a few more. This project is still a wip, so please mention bugs/improvements. 
+
+If you would like to help work on this project, contact me on Discord: RamRam#0001 or join the Discord server. I still am relatively new to making Python modules, and especially seedfinding, so having an extra brain dedicated to this would be helpful so that I don't waste poor Neil's time asking stupid questions about Minecraft worldgen. This is my first Python module that uses a C extension and also my first project that uses C. Literally before starting this project, I only started learning C 2 days before.
 
 ## Installation
 
-**NOTE: RIGHT NOW THE AUTO BUILD/INSTALL IS ONLY FOR LINUX. I AM TRYING TO FIX THAT RIGHT NOW, BUT I CAN'T GET SHIT TO COMPILE ON WINDOWS**
+~~**NOTE: RIGHT NOW THE AUTO BUILD/INSTALL IS ONLY FOR LINUX. I AM TRYING TO FIX THAT RIGHT NOW, BUT I CAN'T GET SHIT TO COMPILE ON WINDOWS**~~ -Should be fixed now because it now has a source binary that doesn't rely on a .so file
 
 You can install Pyubiomes with pip using the following
 ```pip install Pyubiomes```
@@ -13,34 +15,25 @@ You can install Pyubiomes with pip using the following
 ___
 #### Requirements:
 
- Cubiomes and `Python.h`
+ - Cubiomes
  
+ - [minecraft_nether_generation_rs] (github.com/SeedFinding/minecraft_nether_generation_rs) Rust libary with Python bindings (Not that hard to get)
 
 
 #### Linux: 
 
 - Clone this reposititory and [Cubiomes](https://github.com/Cubitect/cubiomes)
 
-- Move the contents of the Cubiomes master branch into the `Pyubiomes-master/Pyubiomes/searches` directory
-- Open the terminal and change the current working directory to the searches folder you just extracted the cubiomes repo into with `cd` 
-- Run the following command `python setup.py build`
-- Move the `.so` file from the folder that starts with `lib.linux` 2 folders up (to the Pyubiomes folder). 
-- Rename that `.so` file to `searches.so`
-- Run `cd ../../` to change the current directory to the main branch's folder
-- Run `pip install .` to build and install the module
+- install minecraft_nether_generation_rs using [these instructions](https://github.com/SeedFinding/minecraft_nether_generation_rs)
 
-*Hopefully* nothing went wrong
+- Move the contents of the Cubiomes master branch into the `Pyubiomes-master` and rename the cubiomes master folder to "cubiomes"
+
+- Change the current working directory to the pyubiomes master folder and run `python setup.py install`
 
 ___
 ### Windows:
 
-I couldn't do it because I couldn't get the compiler to recognize `Python.h` or any of the files in the cubiomes library, but it is probably as follows.
- - Do the first 2 steps of the Linux  Installation
-
- - Instead of a `.so` file, you need to use setup.py to compile to a `.dll`
- - Perform the same actions to the `.dll` file as you would to the `.so` file
- - Modify line 4 of `pyubiomes-main/Pyubiomes/search.py` and replace `searches.so` with `searches.dll`
- - Modify line 4 of `pyubiomes-main/setup.py` and replace `searches.so` with `searches.dll`
+The same as Linux, except you might get errors that I don't know how to fix.
 
 ___
 ### Installation Errors:
@@ -82,92 +75,90 @@ For `apt-cyg` (**Cygwin...**)
 
 **Windows:**
 
-Honestly if I knew the answer for Windows, I would've had an auto install/build for it by now. I belive `Python.h` comes with the standard Python installation, so the problem is with path variables or your compiler not checking the proper include paths. I've tried everything I could on Windows, but I couldn't get anything to work. Kind of ironic considering I use it more than Linux and know like 10 times more 
+Honestly if I knew the answer for Windows, I would've had an auto install/build for it by now. I belive `Python.h` comes with the standard Python installation, so the problem is with path variables or your compiler not checking the proper include paths. I've tried everything I could on Windows, but I couldn't get anything to work. Kind of ironic considering I use it more than Linux and know like 10 times more on Windows.
 
 ## Example Code
-This example is here to give ideas on how to use these functions together to make a seedfinder, as for beginners, it may not be obvious to them at first. 
+This example is here to give ideas on how to use these functions together to make a seedfinder, as for beginners, it may not be obvious to them at first. This is just an example. In reality, you would want to search the lower 48 bits first then find an upper 16 to meet the requirements
 ```python
-###############
-#simple example program with mutithreading
+#
+#simple example program
 #that can find biomes and structures
-###############
 
 import Pyubiomes
-from Pyubiomes import Versions, Biomes, Structures, structureLower48, biomesInArea, isValidStructurePos, getSpawn
+import random
+from Pyubiomes import Versions, Biomes, Structures
 
 import concurrent.futures
+from Pyubiomes import structure_in_area, biomes_in_area, is_valid_structure_pos, get_spawn, get_strongholds, PyuMap
 
-wanted=[Biomes.dark_forest, Biomes.savanna] #There's a bug where if you only pass a list with 1 element, the program crashes.
-structure=Structures.Mansion
+wanted=[Biomes.plains, Biomes.savanna] #program does not like it if there's only 1 argument
 
-seeds=[]
+structure=Structures.Village
+nether_biomes=[Biomes.nether_wastes, Biomes.crimson_forest, Biomes.soul_sand_valley, Biomes.warped_forest]
 
-def finder(start, increment):
-	seed=start
+
+
+def finder():
+	seed=0
+	PyuMap(-5332437328450840283, -16, -16, 32, 32, 4, 16, "mushroom_village").save().toPNG() #create a biome map of this cool seed I found
+
 	while True:
 
-			print(seed)
-
-			p=structureLower48(structure, seed,-128, -128, 128, 128, Versions.MC_1_16) #check region for structure
-			q=biomesInArea(wanted, seed, -64, -64, 64, 64, Versions.MC_1_16) #check region for list of biomes
-
-			if p and q: #compare the 2
-				r=isValidStructurePos (structure, seed, p[0], p[1], Versions.MC_1_16) #if there is a structure
-				if r:
-					spawn=getSpawn(seed, Versions.MC_1_16)
-					print(f"found seed that met requirements: {seed} with structure at {p}, and a world spawn of {spawn}")
-					global seeds
-					seeds.append(seed)
-				if len(seeds)>=1: #make sure all threads break out of the loop
+		structurecheck=structure_in_area(structure, seed, -128, -128, 128, 128, 16) #check to see if the structure is in the area
+		print(seed)
+		if structurecheck:
+			if is_valid_structure_pos(structure, seed, *structurecheck, 16): #check if structure can spawn
+				biomecheck=biomes_in_area(wanted, seed, -128, -128, 128, 128, 16) and Pyubiomes.nether_biomes_in_area(seed, nether_biomes,-128, -128, 128, 128) #check for overworld and nether biomes
+				if biomecheck: 
+					print(f"found seed {seed}")
+					exit()
 					break
-			seed+=increment
-				
 
-def start(n): #ThreadPool
-		with concurrent.futures.ThreadPoolExecutor(max_workers=n) as executor:
-			jobs = {executor.submit(finder, *(i,n)) for i in range(n)}
-		for fut in concurrent.futures.as_completed(jobs):
-			print(fut.result())
+		
+		seed=random.randint(-2**63, 2**63-1) #generate "random" seed
 
-start(4) #initialize
+finder()
+
 
 ```
 ## Documentation:
-
+**Note:** Code written before 0.2.0 will no longer work due to changes in naming for functions to become more pythonic
 ### Biome-Searching Functions:
 
 ```python
-biomeAtPos(biome: int, seed: long, xpos: int, zpos: int, version: int)
+biome_at_pos(biome: int, seed: long, xpos: int, zpos: int, version: int)
 ```
-Returns ```True``` if there is a ```[biome]``` at ```(xpos, zpos)``` on the seed ```[seed]``` in minecraft version ```[version]```. Otherwise returns ```False```. 
+Returns `True` if there is a `[biome]` at `(xpos, zpos)` on the seed `[seed]` in minecraft version `[version]`. Otherwise returns `False`. 
 
 
 ```python
-biomesInArea(biomes: list, seed: long, x1: int, z1: int, x2: int, z2: int, version: int)
+biomes_in_area(biomes: list, seed: long, x1: int, z1: int, x2: int, z2: int, version: int) 
 ```
+
 Returns `True` if all of the given biomes, `[biomes]` are in the rectangular area between corners `(x1,z1)` and `(x2,z2)`. Otherwise returns `False`
 **Note:** The x and z values of the first point must be strictly less than the corresponding values of the second point.
 
 ### Structure Finding:
 ```python 
-structureLower48(structType: int, lower48: long, x1: int, z1: int, x2: int, z2: int, version: int)
+structure_in_area(structType: int, lower48: long, x1: int, z1: int, x2: int, z2: int, version: int)
 ```
-Returns Structure Position as a tuple if the (lower 48 bits of) the seed, `[lower48]` has a structure of `[structureType]` in the rectangular region between points `(x1,z1)`, `(x2,z2)`. Otherwise returns `None`". **Note:** The x and z values of the first point must be strictly less than the corresponding values of the second point.
+Returns Structure Position as a tuple if the (lower 48 bits of) the seed, `[lower48]` has an attempted spawn of a structure of `[structureType]` in the rectangular region between points `(x1,z1)`, `(x2,z2)`. Otherwise returns `None`". **Note:** The x and z values of the first point must be strictly less than the corresponding values of the second point.
 
 
 ```python 
-isValidStructurePos(structType: int, seed: long, structx: int, structz: int, version: int)
+is_valid_structure_pos(structType: int, seed: long, structx: int, structz: int, version: int)
 ```
-Returns `True` if the given structure type, `[structType]` has a valid spawning at the location `(structx, structz)`. Otherwise returns `False`.
+Returns `True` if the given structure type, `[structType]` has a valid spawning location at the location `(structx, structz)`. Otherwise returns `False`.
 
-## Get World Spawnpoint
+### Get World Spawnpoint
 
 ```python
-getSpawn(seed: long, version: int)
+get_spawn(seed: long, version: int)
 ```
-Returns a tuple containing the x and z coordinates of the worldspawn for `[seed]` in minecraft version `[version]`
+Returns a tuple containing the x and z coordinates of the estimated worldspawn for `[seed]` in minecraft version `[version]`
 
-## Constants
+
+### Constants
 You've probably noticed that all of these functions ask for the biome, structure, etc. as an integer.
 
 You do not need to memorize IDs to pass in as parameters, as there are keywords in a few classes.
@@ -177,4 +168,7 @@ To pass in a value for a biome into a function, you can pass in `Biomes.namespac
 
 The same thing applies for structures, except the class you want to access is the `Structures` class, so it would be `Structures.namespaced_id`.
 
-For the version, you can pass in `Versions.MC_1_xx`, or you can just pass in the final 2 digits of the version number
+For the version, you can pass in `Versions.MC_1_xx`, or you can just pass in the final 2 digits of the version number. It can be more clear to people not used to the module if you use `Versions.MC_1_xx`, however.
+
+### Nether
+Thanks to [Neil](https://github.com/hube12/) for making this nether stuff possible. Neil released a new commit of minecraft_nether_generation_rs that allows it to be compatible with the old version of Rust (1.44.0) that Replit uses. Without them, this project would take many many times longer because I wouldn't be able to work on it at school. He's a really cool dude that is the leader of projects such as [minemap](https://github.com/hube12/Minemap/tree/1.0.10). The nether stuff is still wip, but so far I've gotten the ability to find biomes.

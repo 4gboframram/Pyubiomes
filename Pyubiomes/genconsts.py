@@ -1,7 +1,13 @@
 class Versions:
+	'''
+	The constants for minecraft versions used by Pyubiomes. It is probably easier to just use the value, but whatever
+	'''
 	MC_1_0,MC_1_1,MC_1_2,MC_1_3,MC_1_4,MC_1_5,MC_1_6,MC_1_7,MC_1_8,MC_1_9,MC_1_10,MC_1_11,MC_1_12,MC_1_13,MC_1_14,MC_1_15,MC_1_16=tuple(range(17))
 
 class Biomes:
+	'''
+	Converts the namespaced id of a biome to the numerical id
+	'''
 	none=-1,
 	ocean=0
 	plains=1
@@ -84,7 +90,10 @@ class Biomes:
 	basalt_deltas=173
 
 class Structures:
-	Feature=0#forlocationsoftemplegenerationattemptspre1.13
+	'''
+	Converts the namespaced ids of structures into their numerical id
+	'''
+	Feature=0#for locations of temple generation attempts pre1.13
 	Desert_Pyramid=1
 	Jungle_Pyramid=2
 	Swamp_Hut=3
